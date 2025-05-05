@@ -17,8 +17,8 @@ function wrapAction(action: Action) {
 
 program
 	.name(programName)
-	.option('--identifier [identifier]', 'An identifier to search for')
-	.argument('[pattern]')
+	.option('--identifier', 'Treat pattern as identifier (search of all possible casings with word boundaries)')
+	.argument('<pattern>')
 	.action(wrapAction(rgx));
 
 program.parse(process.argv);

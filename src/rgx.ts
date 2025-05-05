@@ -2,6 +2,7 @@ import camelcase from 'camelcase';
 import decamelize from 'decamelize';
 
 import { Context } from './context.js';
+import { Command } from 'commander';
 
 type RgxOptions = {
 	identifier?: string;
@@ -50,14 +51,16 @@ function identifierToPattern(identifier: string) {
 	return pattern;
 }
 
-export async function rgx(context: Context, pattern: undefined | string, { identifier }: RgxOptions) {
+export async function rgx(context: Context, pattern: string, { identifier }: RgxOptions, command: Command) {
 	if (identifier) {
-		pattern = identifierToPattern(identifier);
+		pattern = identifierToPattern(pattern);
 	}
 
 	if (!pattern) {
 		throw new Error('Missing pattern');
 	}
 
-	await context.executeRg([ pattern ]);
+	const passthroughArgs = command.args.slice(1);
+
+	await context.executeRg([ pattern, ...passthroughArgs ]);
 }
