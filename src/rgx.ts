@@ -5,7 +5,8 @@ import { Context } from './context.js';
 import { Command } from 'commander';
 
 type RgxOptions = {
-	identifier?: string;
+	multiline?: boolean;
+	identifier?: boolean;
 };
 
 function arrayUnique<T>(array: T[]): T[] {
@@ -51,7 +52,7 @@ function identifierToPattern(identifier: string) {
 	return pattern;
 }
 
-export async function rgx(context: Context, pattern: string, { identifier }: RgxOptions, command: Command) {
+export async function rgx(context: Context, pattern: string, { identifier, multiline }: RgxOptions, command: Command) {
 	if (identifier) {
 		pattern = identifierToPattern(pattern);
 	}
@@ -62,5 +63,9 @@ export async function rgx(context: Context, pattern: string, { identifier }: Rgx
 
 	const passthroughArgs = command.args.slice(1);
 
-	await context.executeRg([ pattern, ...passthroughArgs ]);
+	await context.executeRg([
+		...(multiline ? [ '--multiline', '--multiline-dotall' ] : []),
+		pattern,
+		...passthroughArgs,
+	]);
 }

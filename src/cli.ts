@@ -18,6 +18,7 @@ function wrapAction(action: Action) {
 program
 	.name(programName)
 	.option('--identifier', 'Treat pattern as identifier (search of all possible casings with word boundaries)')
+	.option('--multiline', 'Same as `rg --multiline --multiline-dotall`')
 	.argument('<pattern>')
 	.action(wrapAction(rgx));
 
